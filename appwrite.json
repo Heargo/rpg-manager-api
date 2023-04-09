@@ -1,0 +1,21 @@
+{
+    "projectId": "64245af1ebbd1755d53b",
+    "projectName": "RPGManager",
+    "functions": [
+        {
+            "$id": "64334bdf525fa8020b93",
+            "name": "joinTeam",
+            "runtime": "node-16.0",
+            "path": "functions/joinTeam",
+            "entrypoint": "src/index.js",
+            "ignore": [
+                "node_modules",
+                ".npm"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
+        }
+    ]
+}
