@@ -26,11 +26,7 @@ module.exports = async function (req, res) {
   const storage = new sdk.Storage(client);
   const teams = new sdk.Teams(client);
   const users = new sdk.Users(client);
-  const ID = sdk.ID;
-  const Permission = sdk.Permission;
-  const Role = sdk.Role;
   const Query = sdk.Query;
-
 
   if (
     !req.variables['APPWRITE_FUNCTION_ENDPOINT'] ||
@@ -47,43 +43,23 @@ module.exports = async function (req, res) {
 
   const DATABASE_ID = '642473470c82a9f670f4';
   const PLAYERS_COLLECTION_ID = '642477f19ed096294827';
-  const ATTRIBUTES_COLLECTION_ID = '6424794eec33fda3375c';
   const PLAYER_ATTRIBUTES_COLLECTION_ID = '6424804534ea4ffb816c';
 
   const data = JSON.parse(req.variables['APPWRITE_FUNCTION_DATA']);
-  const playerdata = data.player;
-  const gameID = data.player.gameID;
-  const teamID = data.teamID; //for permissions
+  const playerID = data.playerID;
 
-  //create player
-  let player = await database.createDocument(DATABASE_ID, PLAYERS_COLLECTION_ID, ID.unique() , playerdata, [
-     //team permissions for read
-     Permission.read(Role.team(teamID)),
-     //owner permissions
-     Permission.read(Role.user(playerdata.ownerID)),
-     Permission.write(Role.user(playerdata.ownerID)),
-     Permission.delete(Role.user(playerdata.ownerID)),
-     Permission.update(Role.user(playerdata.ownerID))
+  //TODO delete player inventory
+
+  //delete player attributes
+  let playerAttributes = await database.listDocuments(DATABASE_ID, PLAYER_ATTRIBUTES_COLLECTION_ID, [
+    Query.equal('playerID', playerID)
   ]);
-
-  //create attributes for player
-  let attributes = await database.listDocuments(DATABASE_ID, ATTRIBUTES_COLLECTION_ID, [Query.equal('gameID',gameID)]);
-  attributes.documents.forEach(attr => {
-    database.createDocument(DATABASE_ID, PLAYER_ATTRIBUTES_COLLECTION_ID, ID.unique(), {
-      playerID: player.$id,
-      attributeID: attr.$id,
-      value: 0
-    }, [
-      //team permissions for read
-      Permission.read(Role.team(teamID)),
-      //owner permissions
-      Permission.read(Role.user(playerdata.ownerID)),
-      Permission.write(Role.user(playerdata.ownerID)),
-      Permission.delete(Role.user(playerdata.ownerID)),
-      Permission.update(Role.user(playerdata.ownerID))
-    ]);
+  playerAttributes.documents.forEach(async (playerAttribute) => {
+    database.deleteDocument(DATABASE_ID, PLAYER_ATTRIBUTES_COLLECTION_ID, playerAttribute.$id);
   });
 
+  //delete player
+  await database.deleteDocument(DATABASE_ID, PLAYERS_COLLECTION_ID, playerID);
 
-  res.json({ });
+  res.json({message: "Player deleted successfully" });
 };
