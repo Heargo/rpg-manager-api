@@ -1,5 +1,6 @@
 
 #ignore this file as it contains project id
 appwrite.json
+environment.ts
 
 

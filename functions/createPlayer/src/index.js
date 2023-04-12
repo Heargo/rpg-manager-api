@@ -45,10 +45,10 @@ module.exports = async function (req, res) {
       .setSelfSigned(true);
   }
 
-  const DATABASE_ID = '642473470c82a9f670f4';
-  const PLAYERS_COLLECTION_ID = '642477f19ed096294827';
-  const ATTRIBUTES_COLLECTION_ID = '6424794eec33fda3375c';
-  const PLAYER_ATTRIBUTES_COLLECTION_ID = '6424804534ea4ffb816c';
+  const DATABASE_ID = 'rpgmanager_db';
+  const PLAYERS_COLLECTION_ID = 'Player';
+  const ATTRIBUTES_COLLECTION_ID = 'Attribute';
+  const PLAYER_ATTRIBUTES_COLLECTION_ID = 'PlayerAttributes';
 
   const data = JSON.parse(req.variables['APPWRITE_FUNCTION_DATA']);
   const playerdata = data.player;

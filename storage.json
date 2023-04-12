@@ -1,0 +1,82 @@
+{
+  "total": 4,
+  "buckets": [
+    {
+      "$id": "Maps",
+      "$createdAt": "2023-04-12T01:41:10.816+00:00",
+      "$updatedAt": "2023-04-12T01:41:10.816+00:00",
+      "$permissions": [],
+      "fileSecurity": false,
+      "name": "Maps",
+      "enabled": true,
+      "maximumFileSize": 30000000,
+      "allowedFileExtensions": [
+        "--compression",
+        "none"
+      ],
+      "compression": "none",
+      "encryption": true,
+      "antivirus": true
+    },
+    {
+      "$id": "Items",
+      "$createdAt": "2023-04-12T01:41:11.321+00:00",
+      "$updatedAt": "2023-04-12T01:41:11.321+00:00",
+      "$permissions": [],
+      "fileSecurity": false,
+      "name": "Items",
+      "enabled": true,
+      "maximumFileSize": 30000000,
+      "allowedFileExtensions": [
+        "--compression",
+        "none"
+      ],
+      "compression": "none",
+      "encryption": true,
+      "antivirus": true
+    },
+    {
+      "$id": "Profiles",
+      "$createdAt": "2023-04-12T01:41:11.834+00:00",
+      "$updatedAt": "2023-04-12T01:41:11.834+00:00",
+      "$permissions": [
+        "create(\"users\")"
+      ],
+      "fileSecurity": true,
+      "name": "Profiles",
+      "enabled": true,
+      "maximumFileSize": 2097152,
+      "allowedFileExtensions": [
+        "jpg",
+        "png",
+        "svg",
+        "gif"
+      ],
+      "compression": "none",
+      "encryption": true,
+      "antivirus": true
+    },
+    {
+      "$id": "GamePreviews",
+      "$createdAt": "2023-04-12T01:41:12.345+00:00",
+      "$updatedAt": "2023-04-12T01:41:12.345+00:00",
+      "$permissions": [
+        "create(\"users\")",
+        "read(\"users\")"
+      ],
+      "fileSecurity": true,
+      "name": "GamePreviews",
+      "enabled": true,
+      "maximumFileSize": 2097152,
+      "allowedFileExtensions": [
+        "jpg",
+        "png",
+        "svg",
+        "gif"
+      ],
+      "compression": "none",
+      "encryption": true,
+      "antivirus": true
+    }
+  ]
+}
