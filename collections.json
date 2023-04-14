@@ -3,15 +3,15 @@
   "collections": [
     {
       "$id": "Game",
-      "$createdAt": "2023-04-12T01:30:52.144+00:00",
-      "$updatedAt": "2023-04-12T01:30:52.144+00:00",
+      "$createdAt": "2023-04-12T01:40:54.234+00:00",
+      "$updatedAt": "2023-04-12T16:56:14.374+00:00",
       "$permissions": [
         "create(\"users\")"
       ],
       "databaseId": "rpgmanager_db",
       "name": "Game",
       "enabled": true,
-      "documentSecurity": false,
+      "documentSecurity": true,
       "attributes": [
         {
           "key": "name",
@@ -57,19 +57,34 @@
           "array": false,
           "size": 100,
           "default": null
+        },
+        {
+          "key": "attributes",
+          "type": "relationship",
+          "status": "available",
+          "required": false,
+          "array": false,
+          "relatedCollection": "Attribute",
+          "relationType": "oneToMany",
+          "twoWay": false,
+          "twoWayKey": "Game",
+          "onDelete": "cascade",
+          "side": "parent"
         }
       ],
       "indexes": []
     },
     {
       "$id": "Player",
-      "$createdAt": "2023-04-12T01:30:55.045+00:00",
-      "$updatedAt": "2023-04-12T01:30:55.045+00:00",
-      "$permissions": [],
+      "$createdAt": "2023-04-12T01:40:57.123+00:00",
+      "$updatedAt": "2023-04-13T17:54:15.764+00:00",
+      "$permissions": [
+        "create(\"users\")"
+      ],
       "databaseId": "rpgmanager_db",
       "name": "Player",
       "enabled": true,
-      "documentSecurity": false,
+      "documentSecurity": true,
       "attributes": [
         {
           "key": "name",
@@ -106,14 +121,49 @@
           "array": false,
           "size": 100,
           "default": null
+        },
+        {
+          "key": "attributes",
+          "type": "relationship",
+          "status": "available",
+          "required": false,
+          "array": false,
+          "relatedCollection": "PlayerAttributes",
+          "relationType": "oneToMany",
+          "twoWay": false,
+          "twoWayKey": "Player",
+          "onDelete": "cascade",
+          "side": "parent"
+        },
+        {
+          "key": "money",
+          "type": "double",
+          "status": "available",
+          "required": true,
+          "array": false,
+          "min": "-1.7976931348623157e+308",
+          "max": "1.7976931348623157e+308",
+          "default": null
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "key": "gameID",
+          "type": "key",
+          "status": "available",
+          "attributes": [
+            "gameID"
+          ],
+          "orders": [
+            "ASC"
+          ]
+        }
+      ]
     },
     {
       "$id": "Attribute",
-      "$createdAt": "2023-04-12T01:30:57.772+00:00",
-      "$updatedAt": "2023-04-12T01:30:57.772+00:00",
+      "$createdAt": "2023-04-12T01:40:59.522+00:00",
+      "$updatedAt": "2023-04-12T17:07:24.766+00:00",
       "$permissions": [
         "create(\"users\")",
         "read(\"users\")"
@@ -121,17 +171,8 @@
       "databaseId": "rpgmanager_db",
       "name": "Attribute",
       "enabled": true,
-      "documentSecurity": false,
+      "documentSecurity": true,
       "attributes": [
-        {
-          "key": "gameID",
-          "type": "string",
-          "status": "available",
-          "required": true,
-          "array": false,
-          "size": 100,
-          "default": null
-        },
         {
           "key": "baseValue",
           "type": "integer",
@@ -156,13 +197,13 @@
     },
     {
       "$id": "Item",
-      "$createdAt": "2023-04-12T01:30:59.742+00:00",
-      "$updatedAt": "2023-04-12T01:30:59.742+00:00",
+      "$createdAt": "2023-04-12T01:41:01.488+00:00",
+      "$updatedAt": "2023-04-12T17:08:11.818+00:00",
       "$permissions": [],
       "databaseId": "rpgmanager_db",
       "name": "Item",
       "enabled": true,
-      "documentSecurity": false,
+      "documentSecurity": true,
       "attributes": [
         {
           "key": "name",
@@ -228,13 +269,15 @@
     },
     {
       "$id": "PlayerAttributes",
-      "$createdAt": "2023-04-12T01:31:02.242+00:00",
-      "$updatedAt": "2023-04-12T01:31:02.242+00:00",
-      "$permissions": [],
+      "$createdAt": "2023-04-12T01:41:04.315+00:00",
+      "$updatedAt": "2023-04-13T18:04:02.792+00:00",
+      "$permissions": [
+        "create(\"users\")"
+      ],
       "databaseId": "rpgmanager_db",
       "name": "PlayerAttributes",
       "enabled": true,
-      "documentSecurity": false,
+      "documentSecurity": true,
       "attributes": [
         {
           "key": "value",
@@ -247,21 +290,26 @@
           "default": null
         },
         {
-          "key": "playerID",
-          "type": "string",
+          "key": "attribute",
+          "type": "relationship",
           "status": "available",
-          "required": true,
+          "required": false,
           "array": false,
-          "size": 100,
-          "default": null
+          "relatedCollection": "Attribute",
+          "relationType": "manyToOne",
+          "twoWay": false,
+          "twoWayKey": "PlayerAttributes",
+          "onDelete": "setNull",
+          "side": "parent"
         },
         {
-          "key": "attributeID",
-          "type": "string",
+          "key": "valueAddition",
+          "type": "integer",
           "status": "available",
           "required": true,
           "array": false,
-          "size": 100,
+          "min": "-9223372036854775808",
+          "max": "9223372036854775807",
           "default": null
         }
       ],
@@ -269,13 +317,13 @@
     },
     {
       "$id": "PlayerItems",
-      "$createdAt": "2023-04-12T01:31:04.251+00:00",
-      "$updatedAt": "2023-04-12T01:31:04.251+00:00",
+      "$createdAt": "2023-04-12T01:41:06.336+00:00",
+      "$updatedAt": "2023-04-12T17:08:32.839+00:00",
       "$permissions": [],
       "databaseId": "rpgmanager_db",
       "name": "PlayerItems",
       "enabled": true,
-      "documentSecurity": false,
+      "documentSecurity": true,
       "attributes": [
         {
           "key": "player",
@@ -318,13 +366,13 @@
     },
     {
       "$id": "ItemAttributes",
-      "$createdAt": "2023-04-12T01:31:06.679+00:00",
-      "$updatedAt": "2023-04-12T01:31:06.679+00:00",
+      "$createdAt": "2023-04-12T01:41:08.754+00:00",
+      "$updatedAt": "2023-04-12T17:08:16.817+00:00",
       "$permissions": [],
       "databaseId": "rpgmanager_db",
       "name": "ItemAttributes",
       "enabled": true,
-      "documentSecurity": false,
+      "documentSecurity": true,
       "attributes": [
         {
           "key": "item",

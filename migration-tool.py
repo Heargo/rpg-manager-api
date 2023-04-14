@@ -56,7 +56,8 @@ class appwriteMigrationTool:
         #create database in appwrite
         #os.system(f'cmd /c "appwrite databases create --databaseId {databasename} --name {databasename}')
         self.commandList.append(f'appwrite databases create --databaseId {databasename} --name {databasename}')
-        self.create_appwrite_collections(self.collections,databasename)
+        self.create_collections(self.collections,databasename)
+        self.create_attributes(self.collections,databasename)
 
         
 
@@ -85,8 +86,8 @@ class appwriteMigrationTool:
     
     def createCollection(self,collection):
         print("Creating collection",collection)
-
-    def create_appwrite_collections(self,data, database_id):
+    
+    def create_collections(self,data,database_id):
         print("Creating",data['total'], "collections")
         for i in range(int(data['total'])):
             collection = data['collections'][i]
@@ -97,23 +98,35 @@ class appwriteMigrationTool:
             # Create collection
             create_collection_cmd = f'appwrite databases createCollection --databaseId {database_id} --collectionId {collection_id} --name {collection_name} {collection_permissions}'
             self.commandList.append(create_collection_cmd)
+
+
+    def create_attributes(self,data, database_id):
+        print("Creating attributes")
+        for i in range(int(data['total'])):
+            collection = data['collections'][i]
+            collection_id = collection['$id']
             # Create attributes
             for attr in collection['attributes']:
                 attr_name = attr['key']
                 attr_type = self.get_type(attr)
                 create_attr_cmd = f'appwrite databases create{attr_type}Attribute --databaseId {database_id} --collectionId {collection_id} --key {attr_name}'
+                
+                if(attr_type=='Relationship'):
+                    create_attr_cmd += f' --relatedCollectionId {self.getIdOfCollection(attr["relatedCollection"])}'
+                
                 for key, value in attr.items():
                     v = value
                     k = key
 
                     #skip some keys and handle execptions and weird cases
-                    if key in ['key', 'type', 'format', 'status'] : continue
+                    if key in ['key', 'type', 'format', 'status','side'] : continue
                     if key == 'default' and value == None : continue
                     if key == 'default' : k = "xdefault"
+                    if key == 'relationType': k = 'type'
                     if(type(value)==bool) : v = str(value).lower()
-                    #if value is to big for int skip it
                     if key == 'max' and type(value)==str : continue
                     if key == 'min' and type(value)==str : continue
+                    if attr_type == 'Relationship' and key in ['required','array','relatedCollection']: continue
                     if key == 'elements':
                         v = " "
                         for e in value:
@@ -158,6 +171,13 @@ class appwriteMigrationTool:
         
         return json.loads(content)["functions"]
 
+    def getIdOfCollection(self,name):
+        for collection in self.collections['collections']:
+            print('search for',name,'in',collection['name'],'result',collection['name'] == name)
+            if collection['name'] == name:
+                return collection['$id']
+        return None
+
     def generateEnvironmentFile(self,endpoint,projectid):
         print("Work in progress")
         self.loadCollections()
@@ -180,6 +200,8 @@ class appwriteMigrationTool:
             for function in self.getFunctions():
                 f.write("\t"+function['name'] + " = \"" + function['$id'] + "\",\n")
             f.write("};\n")
+
+            # TODO: add the max and min size constants (max file size, max name length etc...)
 
             f.write("//end of file")
 
@@ -209,7 +231,7 @@ if __name__ == "__main__":
             appwriteMigration.getDatabases(databaseid)
         elif choice == "3":
             appwriteMigration.getStorage()
-        elif choice == "4":
+        elif choice[0] == "4":
             databasename = input("Enter the database name: ")
             appwriteMigration.uploadDatabases(databasename)
             appwriteMigration.uploadStorage()
@@ -218,8 +240,9 @@ if __name__ == "__main__":
                 for cmd in appwriteMigration.commandList:
                     f.write("call " + cmd + "\n")
             
-            #run commands.bat file
-            os.system(f'cmd /c "commands.bat"')
+            #run commands (upload to appwrite)
+            if('--ignoreUpload' not in choice):
+                os.system(f'cmd /c "commands.bat"')
         elif choice == "5":
             print("Work in progress")
             endpoint = input("Enter your endpoint: ")

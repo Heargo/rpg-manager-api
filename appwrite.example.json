@@ -23,67 +23,6 @@
             },
             "schedule": "",
             "timeout": 15
-        },
-        {
-            "$id": "getPlayers",
-            "name": "getPlayers",
-            "runtime": "node-16.0",
-            "path": "functions/getPlayers",
-            "entrypoint": "src/index.js",
-            "ignore": [
-                "node_modules",
-                ".npm"
-            ],
-            "execute": [
-                "users"
-            ],
-            "events": [],
-            "variables":{
-                "APPWRITE_FUNCTION_ENDPOINT":"https://example.com/v1",
-                "APPWRITE_FUNCTION_PROJECT_ID":"INSERT_PROJECT_ID",
-                "APPWRITE_FUNCTION_API_KEY":"API_KEY"
-            },
-            "schedule": "",
-            "timeout": 15
-        },
-        {
-            "$id": "createPlayer",
-            "name": "createPlayer",
-            "runtime": "node-16.0",
-            "path": "functions/createPlayer",
-            "entrypoint": "src/index.js",
-            "ignore": [
-                "node_modules",
-                ".npm"
-            ],
-            "execute": [
-                "users"
-            ],
-            "events": [],
-            "variables":{
-                "APPWRITE_FUNCTION_ENDPOINT":"https://example.com/v1",
-                "APPWRITE_FUNCTION_PROJECT_ID":"INSERT_PROJECT_ID",
-                "APPWRITE_FUNCTION_API_KEY":"API_KEY"
-            },
-            "schedule": "",
-            "timeout": 15
-        },
-        {
-            "$id": "deletePlayer",
-            "name": "deletePlayer",
-            "runtime": "node-16.0",
-            "path": "functions/deletePlayer",
-            "entrypoint": "src/index.js",
-            "ignore": [
-                "node_modules",
-                ".npm"
-            ],
-            "execute": [
-                "users"
-            ],
-            "events": [],
-            "schedule": "",
-            "timeout": 15
         }
     ]
 }
