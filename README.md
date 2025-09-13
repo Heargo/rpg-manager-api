@@ -1,27 +1,58 @@
-# RPGManager-back
+# NestJS Starter Kit
 
-## Deploy
+This is a starter kit for NestJS projects. It includes the following:
 
-1. On your appwrite console, create a project.
-2. Create an appwrite.json file and replace project ID & project Name.
+- [x] A `README.md` file with a description of the project and how to run it
+- [x] Scalable folder structure
+- [x] Linter and prettier
+- [x] Authentification with JWT.
+- [x] Auth guard for routes
+- [x] Database setup (postgres)
+- [x] Swagger documentation available at `/api`
+- [x] Test setup
+- [x] docker compose file for development & production
+- [x] TypeOrm
 
-## setup appwrite project with the migration-tool
+## Installation
 
-1. start the script and login to your appwrite account.
-2. select upload database & storage option
-3. enter a name for the database (example: rpgmanager_db). This will create a database, all collections and buckets needed.
-4. Generate environments.ts file with the option "generate environment.ts file for frontend" You can use this file for your frontend app. It contains all the needed environment and endpoints variables.
-5. Some functions needs endpoints for collections etc.. You have to replace the endpoints in the functions with the endpoints of your appwrite project. You can find the endpoints in environment.ts file you generated. NEED TO FIND A WAY TO AUTOMATE THIS
-6. Go in the appwrite project overview and generate a new API key for your functions.
-7. In the file appwrite.json replace the following variables with the values of your appwrite project
-   1. APPWRITE_FUNCTION_ENDPOINT=https://example.com/v1
-   2. APPWRITE_FUNCTION_PROJECT_ID=projectID
-   3. APPWRITE_FUNCTION_API_KEY=API_KEY
-8. Use appwrite CLI to deploy the functions with `appwrite deploy function`
+```bash
+$ npm install
+```
 
-And it's done ! You know have a working appwrite project with all the needed collections, buckets and functions. 
+Copy the `.env.example` file to `.env` and fill in the values.
 
-## get the changes from the appwrite server
-If you did some changes on the appwrite server, you can get the changes in order to regenerate the commands.bat file with the option "get database from project" or "get storage from project". This is important if you want to keep the database structure saved in this repository up to date.
+## Running the app for development
 
- 
+```bash
+# start the database
+$ docker-compose up -d
+
+# start the app in development mode
+$ npm run start:dev
+```
+
+## Deploying the app
+
+Copy the `.env.prod.example` file to `.env.prod` and fill in the values.
+
+Uncomment the `nestjs-app` service, change .env to .env.prod for databaes service in docker-compose.yml and run the following command:
+
+!!! danger Make sure that you have wrote the migrations for the database otherwise the app will not have the correct tables
+
+```bash
+# run docker build
+$ docker-compose up -d --build
+```
+
+## Test
+
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
+```
