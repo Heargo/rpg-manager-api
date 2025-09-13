@@ -29,7 +29,7 @@ export class UserService {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     let user = this.usersRepository.findOneBy({ id });
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -41,7 +41,7 @@ export class UserService {
     return this.usersRepository.findOneBy({ login });
   }
 
-  async getPasswordHash(id: number) {
+  async getPasswordHash(id: string) {
     let user = await this.usersRepository
       .createQueryBuilder('user')
       .addSelect('user.id', 'id')
@@ -51,7 +51,7 @@ export class UserService {
     return user.password;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     //check if user exist
     if ((await this.findOne(id)) == null) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -64,7 +64,7 @@ export class UserService {
     }
   }
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: string): Promise<boolean> {
     if (this.findOne(id) == null) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }

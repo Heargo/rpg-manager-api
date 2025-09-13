@@ -1,0 +1,23 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Attribute } from '../../games/entity/attribute.entity';
+import { Character } from './character.entity';
+
+@Entity()
+export class CharacterAttribute {
+  @ApiProperty()
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @ApiProperty()
+  @ManyToOne(() => Character, { nullable: false })
+  character: Character;
+
+  @ApiProperty()
+  @ManyToOne(() => Attribute, { nullable: false })
+  attribute: Attribute;
+
+  @ApiProperty()
+  @Column()
+  value: number;
+}

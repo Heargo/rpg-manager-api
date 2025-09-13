@@ -54,7 +54,7 @@ export class UserController {
   @ApiAcceptedResponse({ type: User })
   @ApiNotFoundResponse({ description: 'User not found' })
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    return this.userService.findOne(id);
   }
 
   @Patch(':id')
@@ -62,13 +62,13 @@ export class UserController {
   @ApiNotFoundResponse({ description: 'User not found' })
   @ApiNotAcceptableResponse({ description: 'Invalid user' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   @ApiAcceptedResponse({ type: Boolean })
   @ApiNotFoundResponse({ description: 'User not found' })
   async remove(@Param('id') id: string): Promise<boolean> {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }
