@@ -1,6 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from '../../user/entity/user.entity';
+import { Attribute } from './attribute.entity';
 
 @Entity()
 export class Game {
@@ -27,4 +34,8 @@ export class Game {
   @ApiProperty()
   @Column({ nullable: true })
   startingMoney: number;
+
+  @ApiProperty()
+  @OneToMany(() => Attribute, (attribute) => attribute.game)
+  attributes: Attribute[];
 }

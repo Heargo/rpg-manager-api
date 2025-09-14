@@ -5,12 +5,16 @@ import { configService } from './config/config.service';
 import { HttpModule } from '@nestjs/axios';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './module/auth/auth.module';
+import { UserModule } from './module/user/user.module';
+import { GameModule } from './module/games/game.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     HttpModule,
     AuthModule,
+    UserModule,
+    GameModule,
     CommonModule,
   ],
   controllers: [AppController],
