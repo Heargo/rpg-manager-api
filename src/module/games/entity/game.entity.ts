@@ -4,10 +4,12 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../user/entity/user.entity';
 import { Attribute } from './attribute.entity';
+import { File } from '../../../common/entity/file.entity';
 
 @Entity()
 export class Game {
@@ -28,14 +30,18 @@ export class Game {
   description: string;
 
   @ApiProperty()
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'int', default: 0 })
   startingStatsPoints: number;
 
   @ApiProperty()
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'float', default: 0 })
   startingMoney: number;
 
   @ApiProperty()
-  @OneToMany(() => Attribute, (attribute) => attribute.game)
+  @OneToMany(() => Attribute, (attribute) => attribute.game, { cascade: true })
   attributes: Attribute[];
+
+  @ApiProperty()
+  @OneToOne(() => File, { nullable: true, cascade: true, eager: false })
+  image: File;
 }

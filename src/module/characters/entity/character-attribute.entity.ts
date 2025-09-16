@@ -18,6 +18,10 @@ export class CharacterAttribute {
   attribute: Attribute;
 
   @ApiProperty()
-  @Column()
-  value: number;
+  @Column({ type: 'int', default: 0 })
+  investedStatPoints: number;
+
+  @ApiProperty()
+  @Column({ nullable: true, type: 'float', default: 0 })
+  dynamicValue?: number;
 }

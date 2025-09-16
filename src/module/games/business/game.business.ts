@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateUpdateGameDto } from '../dto/game.dto';
 import { GameService } from '../service/game.service';
 import { User } from '../../user/entity/user.entity';
+import { FileHelper } from '../../../common/helper/file.helper';
 
 @Injectable()
 export class GameBusiness {
@@ -10,6 +11,16 @@ export class GameBusiness {
   constructor(@Inject(GameService) private gameService: GameService) {}
 
   public async createGame(gameMaster: User, game: CreateUpdateGameDto) {
+    //compress image before saving
+    if (game.image) {
+      if (!FileHelper.isBufferSizeValid(game.image)) {
+        throw new HttpException(
+          'Image size exceeds the limit',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      game.image = FileHelper.compressImage(game.image);
+    }
     return this.gameService.create(gameMaster, game);
   }
 

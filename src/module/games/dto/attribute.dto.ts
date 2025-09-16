@@ -11,4 +11,13 @@ export class AttributeDto {
 
   @ApiProperty()
   maxValue: number;
+
+  @ApiProperty()
+  dynamic: boolean;
+
+  @ApiProperty()
+  color: string;
+
+  @ApiProperty()
+  statsPointCost: number;
 }

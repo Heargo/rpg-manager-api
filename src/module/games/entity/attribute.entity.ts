@@ -13,8 +13,20 @@ export class Attribute {
   name: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: true })
   maxValue: number;
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  dynamic: boolean;
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  color: string;
+
+  @ApiProperty()
+  @Column({ nullable: true, type: 'float', default: 1 })
+  statsPointCost: number;
 
   @ApiProperty()
   @ManyToOne(() => Game, { nullable: false })

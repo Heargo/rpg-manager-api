@@ -15,7 +15,19 @@ export class GameService {
     gameMaster: User,
     createGameDto: CreateUpdateGameDto,
   ): Promise<Game> {
-    return this.gameRepository.save({ ...createGameDto, gameMaster });
+    return this.gameRepository.save({
+      name: createGameDto.name,
+      gameMaster,
+      description: createGameDto.description,
+      startingStatsPoints: createGameDto.startingStatsPoints,
+      startingMoney: createGameDto.startingMoney,
+      attributes: createGameDto.attributes,
+      // image: {
+      //   file: createGameDto.image,
+      //   filename: `${createGameDto.name}-image`,
+      //   // mimetype: 'image/png', // TODO mime type
+      // },
+    });
   }
 
   async findByGameMaster(gameMasterId: string): Promise<Game[]> {
@@ -33,7 +45,19 @@ export class GameService {
   }
 
   async update(id: string, updateGameDto: CreateUpdateGameDto): Promise<Game> {
-    await this.gameRepository.update(id, updateGameDto);
+    await this.gameRepository.update(id, {
+      name: updateGameDto.name,
+      description: updateGameDto.description,
+      startingStatsPoints: updateGameDto.startingStatsPoints,
+      startingMoney: updateGameDto.startingMoney,
+      attributes: updateGameDto.attributes,
+      //TODO image
+      // image: {
+      //   file: updateGameDto.image,
+      //   // filename: `${updateGameDto.name}-image`,
+      //   // mimetype: 'image/png', // TODO mime type
+      // },
+    });
     return this.gameRepository.findOne({ where: { id } });
   }
 

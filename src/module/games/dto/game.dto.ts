@@ -23,6 +23,9 @@ export class GameDto {
 
   @ApiProperty({ isArray: true, type: () => [AttributeDto] })
   attributes: AttributeDto[];
+
+  @ApiProperty()
+  imageId: string;
 }
 
 export class CreateUpdateGameDto {
@@ -40,4 +43,7 @@ export class CreateUpdateGameDto {
 
   @ApiProperty({ isArray: true, type: () => [AttributeDto] })
   attributes: AttributeDto[];
+
+  @ApiProperty()
+  image: Buffer;
 }
