@@ -7,6 +7,7 @@ import { CommonModule } from './common/common.module';
 import { AuthModule } from './module/auth/auth.module';
 import { UserModule } from './module/user/user.module';
 import { GameModule } from './module/games/game.module';
+import { FileModule } from './module/files/file.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { GameModule } from './module/games/game.module';
     AuthModule,
     UserModule,
     GameModule,
+    FileModule,
     CommonModule,
   ],
   controllers: [AppController],

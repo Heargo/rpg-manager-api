@@ -22,18 +22,14 @@ export class GameService {
       startingStatsPoints: createGameDto.startingStatsPoints,
       startingMoney: createGameDto.startingMoney,
       attributes: createGameDto.attributes,
-      // image: {
-      //   file: createGameDto.image,
-      //   filename: `${createGameDto.name}-image`,
-      //   // mimetype: 'image/png', // TODO mime type
-      // },
+      image: createGameDto.image,
     });
   }
 
   async findByGameMaster(gameMasterId: string): Promise<Game[]> {
     return this.gameRepository.find({
       where: { gameMaster: { id: gameMasterId } },
-      relations: ['gameMaster'],
+      relations: ['gameMaster', 'attributes'],
     });
   }
 

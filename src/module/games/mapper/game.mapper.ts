@@ -12,7 +12,7 @@ export class GameMapper {
       startingStatsPoints: game.startingStatsPoints,
       startingMoney: game.startingMoney,
       attributes: AttributeMapper.toAttributeDtoArray(game.attributes),
-      imageId: game.image?.id,
+      imageId: game.imageId,
     };
   }
 

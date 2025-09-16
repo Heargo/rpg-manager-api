@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CreateUpdateGameDto } from '../dto/game.dto';
 import { GameService } from '../service/game.service';
 import { User } from '../../user/entity/user.entity';
-import { FileHelper } from '../../../common/helper/file.helper';
+import { FileHelper } from '../../files/helper/file.helper';
 
 @Injectable()
 export class GameBusiness {
@@ -10,16 +10,26 @@ export class GameBusiness {
 
   constructor(@Inject(GameService) private gameService: GameService) {}
 
-  public async createGame(gameMaster: User, game: CreateUpdateGameDto) {
+  public async createGame(
+    gameMaster: User,
+    game: CreateUpdateGameDto,
+    image?: Express.Multer.File,
+  ) {
     //compress image before saving
-    if (game.image) {
-      if (!FileHelper.isBufferSizeValid(game.image)) {
+    if (image) {
+      const imageBuffer = FileHelper.convertToBuffer(image);
+      if (!FileHelper.isBufferSizeValid(imageBuffer)) {
         throw new HttpException(
           'Image size exceeds the limit',
           HttpStatus.BAD_REQUEST,
         );
       }
-      game.image = FileHelper.compressImage(game.image);
+      game.image = {
+        name: image.originalname,
+        file: await FileHelper.compressImage(imageBuffer),
+        mimeType: image.mimetype,
+        sizeInBytes: Buffer.byteLength(imageBuffer),
+      };
     }
     return this.gameService.create(gameMaster, game);
   }
@@ -33,7 +43,7 @@ export class GameBusiness {
   }
 
   public async getGamesByUserId(userId: string) {
-    //TODO (all game the user is part of and game he is master of)
-    return [];
+    const gamesAsGameMaster = await this.gameService.findByGameMaster(userId);
+    return gamesAsGameMaster;
   }
 }
