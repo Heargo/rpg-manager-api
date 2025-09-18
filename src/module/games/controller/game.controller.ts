@@ -14,6 +14,7 @@ import {
   Param,
   Patch,
   HttpException,
+  Delete,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
@@ -96,5 +97,17 @@ export class GameController {
       image,
     );
     return GameMapper.toGameDto(updatedGame);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  async delete(@Param('id') id: string, @Request() req): Promise<void> {
+    const user: User = req.user;
+    // User can only delete their own games (as game master)
+    const game = await this.gameBusiness.getGameById(id);
+    if (user.id !== game.gameMaster.id) {
+      throw new HttpException('Forbidden', 403);
+    }
+    return this.gameBusiness.deleteGame(id);
   }
 }

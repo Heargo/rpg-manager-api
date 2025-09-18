@@ -48,6 +48,7 @@ export class GameService {
       startingStatsPoints: updateGameDto.startingStatsPoints,
       startingMoney: updateGameDto.startingMoney,
       attributes: updateGameDto.attributes,
+      image: updateGameDto.image,
     });
     return this.gameRepository.findOne({
       where: { id },
@@ -55,7 +56,7 @@ export class GameService {
     });
   }
 
-  async remove(id: string): Promise<void> {
-    Logger.warn(`Not implemented: remove game ${id}`);
+  async delete(id: string): Promise<void> {
+    await this.gameRepository.delete(id);
   }
 }

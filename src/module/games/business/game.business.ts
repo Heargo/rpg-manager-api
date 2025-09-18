@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { CreateUpdateGameDto } from '../dto/game.dto';
 import { GameService } from '../service/game.service';
 import { User } from '../../user/entity/user.entity';
@@ -55,13 +61,14 @@ export class GameBusiness {
           HttpStatus.BAD_REQUEST,
         );
       }
+      const compressedImage = await FileHelper.compressImage(imageBuffer);
       game.image = {
         name: image.originalname,
-        file: await FileHelper.compressImage(imageBuffer),
+        file: compressedImage,
         mimeType: image.mimetype,
-        sizeInBytes: Buffer.byteLength(imageBuffer),
+        sizeInBytes: Buffer.byteLength(compressedImage),
       };
-      existingImageId = existingGame?.image?.id;
+      existingImageId = existingGame?.imageId;
     }
 
     const updatedGame = await this.gameService.update(id, game);
@@ -70,6 +77,17 @@ export class GameBusiness {
       await this.fileBusiness.deleteById(existingImageId);
     }
     return updatedGame;
+  }
+
+  public async deleteGame(id: string) {
+    const game = await this.gameService.findById(id);
+    if (!game) {
+      throw new HttpException('Game not found', HttpStatus.NOT_FOUND);
+    }
+    if (game.imageId) {
+      await this.fileBusiness.deleteById(game.imageId);
+    }
+    return this.gameService.delete(id);
   }
 
   public async getGameById(id: string) {

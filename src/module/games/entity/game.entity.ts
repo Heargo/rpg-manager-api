@@ -48,7 +48,7 @@ export class Game {
   attributes: Attribute[];
 
   @ApiProperty()
-  @OneToOne(() => File, { nullable: true, cascade: true })
+  @OneToOne(() => File, { nullable: true, cascade: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'imageId' })
   image: File;
 
