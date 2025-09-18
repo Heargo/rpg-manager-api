@@ -36,25 +36,23 @@ export class GameService {
   async findById(id: string): Promise<Game> {
     return this.gameRepository.findOne({
       where: { id },
-      relations: ['gameMaster'],
+      relations: ['gameMaster', 'attributes'],
     });
   }
 
   async update(id: string, updateGameDto: CreateUpdateGameDto): Promise<Game> {
-    await this.gameRepository.update(id, {
+    await this.gameRepository.save({
+      id: id,
       name: updateGameDto.name,
       description: updateGameDto.description,
       startingStatsPoints: updateGameDto.startingStatsPoints,
       startingMoney: updateGameDto.startingMoney,
       attributes: updateGameDto.attributes,
-      //TODO image
-      // image: {
-      //   file: updateGameDto.image,
-      //   // filename: `${updateGameDto.name}-image`,
-      //   // mimetype: 'image/png', // TODO mime type
-      // },
     });
-    return this.gameRepository.findOne({ where: { id } });
+    return this.gameRepository.findOne({
+      where: { id },
+      relations: ['attributes', 'gameMaster'],
+    });
   }
 
   async remove(id: string): Promise<void> {

@@ -11,7 +11,9 @@ import {
   FileTypeValidator,
   MaxFileSizeValidator,
   ParseFilePipe,
-  Logger,
+  Param,
+  Patch,
+  HttpException,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../common/guards/jwt-auth.guard';
 import { ApiTags } from '@nestjs/swagger';
@@ -20,6 +22,7 @@ import { CreateUpdateGameDto, GameDto } from '../dto/game.dto';
 import { User } from '../../user/entity/user.entity';
 import { GameMapper } from '../mapper/game.mapper';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { FileValidator } from '../../../common/validators/file.validator';
 
 @ApiTags('games')
 @Controller('games')
@@ -46,9 +49,6 @@ export class GameController {
     @Request() req,
   ): Promise<GameDto> {
     const user: User = req.user;
-    createGameDto.attributes = Array.isArray(createGameDto.attributes)
-      ? createGameDto.attributes
-      : [];
     const game = await this.gameBusiness.createGame(user, createGameDto, image);
     return GameMapper.toGameDto(game);
   }
@@ -59,5 +59,42 @@ export class GameController {
     const user: User = req.user;
     const games = await this.gameBusiness.getGamesByUserId(user.id);
     return GameMapper.toGameDtoArray(games);
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  async getById(@Param('id') id: string): Promise<GameDto> {
+    const game = await this.gameBusiness.getGameById(id);
+    return GameMapper.toGameDto(game);
+  }
+
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  async update(
+    @Param('id') id: string,
+    @Body() updateGameDto: CreateUpdateGameDto,
+    @Request() req,
+    @UploadedFile(
+      new FileValidator({
+        required: false,
+        maxSize: 5000000,
+        allowedTypes: ['image/'],
+      }),
+    )
+    image?: Express.Multer.File,
+  ): Promise<GameDto> {
+    const user: User = req.user;
+    // User can only update their own games (as game master)
+    const game = await this.gameBusiness.getGameById(id);
+    if (user.id !== game.gameMaster.id) {
+      throw new HttpException('Forbidden', 403);
+    }
+    const updatedGame = await this.gameBusiness.updateGame(
+      id,
+      updateGameDto,
+      image,
+    );
+    return GameMapper.toGameDto(updatedGame);
   }
 }

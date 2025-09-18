@@ -39,11 +39,16 @@ export class Game {
   startingMoney: number;
 
   @ApiProperty()
-  @OneToMany(() => Attribute, (attribute) => attribute.game, { cascade: true })
+  @OneToMany(() => Attribute, (attribute) => attribute.game, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+    eager: true,
+  })
   attributes: Attribute[];
 
   @ApiProperty()
-  @OneToOne(() => File, { nullable: true, cascade: true, eager: false })
+  @OneToOne(() => File, { nullable: true, cascade: true })
   @JoinColumn({ name: 'imageId' })
   image: File;
 

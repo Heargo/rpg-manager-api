@@ -29,6 +29,10 @@ export class Attribute {
   statsPointCost: number;
 
   @ApiProperty()
-  @ManyToOne(() => Game, { nullable: false })
+  @ManyToOne(() => Game, {
+    nullable: false,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   game: Game;
 }

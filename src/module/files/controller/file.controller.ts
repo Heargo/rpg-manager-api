@@ -14,7 +14,7 @@ export class FileController {
 
   @Get(':id')
   async getFile(@Param('id') id: string): Promise<StreamableFile> {
-    const fileData = await this.fileBusiness.getFileById(id);
+    const fileData = await this.fileBusiness.getById(id);
     return new StreamableFile(fileData.file, {
       type: fileData.mimeType,
     });
