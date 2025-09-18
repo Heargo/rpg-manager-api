@@ -1,7 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Game } from '../../games/entity/game.entity';
 import { User } from '../../user/entity/user.entity';
+import { CharacterAttribute } from './character-attribute.entity';
 
 @Entity()
 export class Character {
@@ -24,4 +31,11 @@ export class Character {
   @ApiProperty()
   @ManyToOne(() => User, { nullable: false })
   user: User;
+
+  @OneToMany(
+    () => CharacterAttribute,
+    (characterAttribute) => characterAttribute.character,
+    { cascade: true, eager: true },
+  )
+  attributes: CharacterAttribute[];
 }

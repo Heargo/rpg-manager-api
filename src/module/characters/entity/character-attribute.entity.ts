@@ -14,7 +14,7 @@ export class CharacterAttribute {
   character: Character;
 
   @ApiProperty()
-  @ManyToOne(() => Attribute, { nullable: false })
+  @ManyToOne(() => Attribute, { nullable: false, eager: true })
   attribute: Attribute;
 
   @ApiProperty()
