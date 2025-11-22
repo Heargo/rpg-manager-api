@@ -8,6 +8,7 @@ import { AuthModule } from './module/auth/auth.module';
 import { UserModule } from './module/user/user.module';
 import { GameModule } from './module/games/game.module';
 import { FileModule } from './module/files/file.module';
+import { CharacterModule } from './module/characters/character.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { FileModule } from './module/files/file.module';
     UserModule,
     GameModule,
     FileModule,
+    CharacterModule,
     CommonModule,
   ],
   controllers: [AppController],

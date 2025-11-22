@@ -8,7 +8,7 @@ import {
 import { CreateUpdateGameDto } from '../dto/game.dto';
 import { GameService } from '../service/game.service';
 import { User } from '../../user/entity/user.entity';
-import { FileHelper } from '../../files/helper/file.helper';
+import { FilesHelper } from '../../files/helper/file.helper';
 import { FileBusiness } from '../../files/business/file.business';
 
 @Injectable()
@@ -27,8 +27,8 @@ export class GameBusiness {
   ) {
     //compress image before saving
     if (image) {
-      const imageBuffer = FileHelper.convertToBuffer(image);
-      if (!FileHelper.isBufferSizeValid(imageBuffer)) {
+      const imageBuffer = FilesHelper.convertToBuffer(image);
+      if (!FilesHelper.isBufferSizeValid(imageBuffer)) {
         throw new HttpException(
           'Image size exceeds the limit',
           HttpStatus.BAD_REQUEST,
@@ -36,7 +36,7 @@ export class GameBusiness {
       }
       game.image = {
         name: image.originalname,
-        file: await FileHelper.compressImage(imageBuffer),
+        file: await FilesHelper.compressImage(imageBuffer),
         mimeType: image.mimetype,
         sizeInBytes: Buffer.byteLength(imageBuffer),
       };
@@ -54,14 +54,14 @@ export class GameBusiness {
     let existingImageId: string | undefined;
     // if image is provided, compress it before saving
     if (image) {
-      const imageBuffer = FileHelper.convertToBuffer(image);
-      if (!FileHelper.isBufferSizeValid(imageBuffer)) {
+      const imageBuffer = FilesHelper.convertToBuffer(image);
+      if (!FilesHelper.isBufferSizeValid(imageBuffer)) {
         throw new HttpException(
           'Image size exceeds the limit',
           HttpStatus.BAD_REQUEST,
         );
       }
-      const compressedImage = await FileHelper.compressImage(imageBuffer);
+      const compressedImage = await FilesHelper.compressImage(imageBuffer);
       game.image = {
         name: image.originalname,
         file: compressedImage,
@@ -69,6 +69,8 @@ export class GameBusiness {
         sizeInBytes: Buffer.byteLength(compressedImage),
       };
       existingImageId = existingGame?.imageId;
+    } else {
+      game.image = existingGame?.image;
     }
 
     const updatedGame = await this.gameService.update(id, game);

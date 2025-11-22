@@ -34,7 +34,6 @@ export class GameController {
   ) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async create(
     @Body() createGameDto: CreateUpdateGameDto,
@@ -55,7 +54,6 @@ export class GameController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard)
   async get(@Request() req): Promise<GameDto[]> {
     const user: User = req.user;
     const games = await this.gameBusiness.getGamesByUserId(user.id);
@@ -63,14 +61,12 @@ export class GameController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
   async getById(@Param('id') id: string): Promise<GameDto> {
     const game = await this.gameBusiness.getGameById(id);
     return GameMapper.toGameDto(game);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async update(
     @Param('id') id: string,
@@ -100,7 +96,6 @@ export class GameController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
   async delete(@Param('id') id: string, @Request() req): Promise<void> {
     const user: User = req.user;
     // User can only delete their own games (as game master)

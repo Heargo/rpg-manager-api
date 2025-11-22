@@ -1,6 +1,6 @@
 import * as sharp from 'sharp';
 
-export class FileHelper {
+export class FilesHelper {
   public static readonly MAX_FILE_SIZE_IN_BYTES = 5 * 1024 * 1024; // 5MB
 
   public static async compressImage(buffer: Buffer): Promise<Buffer> {
