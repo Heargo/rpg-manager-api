@@ -52,6 +52,7 @@ export class CharacterService {
     const character = this.characterRepository.create({
       name: dto.name,
       description: dto.description,
+      image: dto.image,
       game,
       user,
     });
